@@ -1,0 +1,38 @@
+{% extends "rubanrose/base.html" %}
+
+{% block title %}Modifier mes informations{% endblock %}
+
+{% block content %}
+<section class="rr-page-header">
+  <div class="container">
+    <nav aria-label="Fil d'Ariane"><ol class="breadcrumb mb-2">
+      <li class="breadcrumb-item"><a href="{% url 'rubanrose:tableau_de_bord' %}">Mon espace</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Modifier mes informations</li>
+    </ol></nav>
+    <h1>Modifier mes informations</h1>
+  </div>
+</section>
+
+<section class="rr-section pt-4">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <form method="post" enctype="multipart/form-data" novalidate class="card rr-card p-4">
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
+          {% endif %}
+          {% for champ in form %}
+            {% include "rubanrose/partials/_champ_formulaire.html" with champ=champ %}
+          {% endfor %}
+          <p class="small text-muted">Votre statut de vérification n'est pas modifiable ici : seul un administrateur peut le changer.</p>
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-rose">Enregistrer</button>
+            <a href="{% url 'rubanrose:tableau_de_bord' %}" class="btn btn-rose-outline">Annuler</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

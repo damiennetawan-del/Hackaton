@@ -1,0 +1,13 @@
+{% if page_obj.has_other_pages %}
+<nav aria-label="Pagination" class="mt-5">
+  <ul class="pagination justify-content-center rr-pagination">
+    {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?{% if querystring %}{{ querystring }}&amp;{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Page précédente">&lsaquo;</a></li>
+    {% endif %}
+    <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+    {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?{% if querystring %}{{ querystring }}&amp;{% endif %}page={{ page_obj.next_page_number }}" aria-label="Page suivante">&rsaquo;</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}

@@ -1,0 +1,50 @@
+{% extends "rubanrose/base.html" %}
+
+{% block title %}Organisations{% endblock %}
+
+{% block content %}
+<section class="rr-page-header">
+  <div class="container">
+    <nav aria-label="Fil d'Ariane"><ol class="breadcrumb mb-2">
+      <li class="breadcrumb-item"><a href="{% url 'rubanrose:accueil' %}">Accueil</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Organisations</li>
+    </ol></nav>
+    <h1>Les organisations engagées</h1>
+    <p class="rr-lead mb-0">Associations, ONG et structures de santé vérifiées par la plateforme.</p>
+  </div>
+</section>
+
+<section class="rr-section pt-4">
+  <div class="container">
+    <form method="get" class="rr-filtres mb-4">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-6">
+          <label for="q" class="form-label small mb-1">Recherche</label>
+          <input type="search" id="q" name="q" value="{{ q }}" class="form-control" placeholder="Nom, zone d'intervention, mot-clé…">
+        </div>
+        <div class="col-md-3">
+          <label for="ville" class="form-label small mb-1">Ville</label>
+          <select id="ville" name="ville" class="form-select">
+            <option value="">Toutes les villes</option>
+            {% for v in villes %}<option value="{{ v }}" {% if v == ville %}selected{% endif %}>{{ v }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+          <button type="submit" class="btn btn-rose flex-grow-1">Rechercher</button>
+          {% if q or ville %}<a href="{% url 'rubanrose:liste_organisations' %}" class="btn btn-rose-outline" aria-label="Réinitialiser"><i class="bi bi-x-lg"></i></a>{% endif %}
+        </div>
+      </div>
+    </form>
+
+    <p class="text-muted small">{{ page_obj.paginator.count }} organisation{{ page_obj.paginator.count|pluralize }} trouvée{{ page_obj.paginator.count|pluralize }}</p>
+    <div class="row g-4">
+      {% for organisation in page_obj %}
+        <div class="col-md-6 col-lg-4">{% include "rubanrose/partials/_carte_organisation.html" %}</div>
+      {% empty %}
+        <div class="col-12 rr-empty"><i class="bi bi-search"></i>Aucune organisation ne correspond à votre recherche.</div>
+      {% endfor %}
+    </div>
+    {% include "rubanrose/partials/_pagination.html" %}
+  </div>
+</section>
+{% endblock %}

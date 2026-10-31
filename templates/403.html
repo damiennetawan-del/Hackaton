@@ -1,0 +1,12 @@
+{% extends "rubanrose/base.html" %}
+{% block title %}Accès refusé{% endblock %}
+{% block content %}
+<section class="rr-error">
+  <div class="container">
+    <div class="rr-error-code">403</div>
+    <h1 class="h2 mb-3">Accès refusé</h1>
+    <p class="text-muted mb-4">Vous n'avez pas l'autorisation d'accéder à cette page.</p>
+    <a href="{% url 'rubanrose:accueil' %}" class="btn btn-rose">Retour à l'accueil</a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,25 @@
+<article class="card rr-card h-100">
+  <div class="rr-media">
+    {% if cagnotte.image %}
+      <img src="{{ cagnotte.image.url }}" alt="Image : {{ cagnotte.titre }}">
+    {% else %}
+      <i class="bi bi-heart-pulse" aria-hidden="true"></i>
+    {% endif %}
+  </div>
+  <div class="card-body p-4">
+    <h3 class="h5">
+      <a class="stretched-link" href="{{ cagnotte.get_absolute_url }}">{{ cagnotte.titre }}</a>
+    </h3>
+    <p class="rr-meta mb-3"><i class="bi bi-people-fill"></i>{{ cagnotte.organisation.nom }}</p>
+    <p class="mb-1 small"><strong>Objectif :</strong> {{ cagnotte.objectif_financier|floatformat:"0g" }} FCFA</p>
+    {% if cagnotte.pourcentage_collecte is not None %}
+      <div class="progress mb-1" role="progressbar" aria-valuenow="{{ cagnotte.pourcentage_collecte }}" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar" style="width: {{ cagnotte.pourcentage_collecte }}%"></div>
+      </div>
+      <p class="rr-meta mb-0">{{ cagnotte.pourcentage_collecte }} % de l'objectif (montant vérifié)</p>
+    {% else %}
+      <p class="rr-meta mb-0"><i class="bi bi-info-circle"></i>Montant collecté non communiqué</p>
+    {% endif %}
+    <p class="rr-meta mt-2 mb-0"><i class="bi bi-calendar-check"></i>Jusqu'au {{ cagnotte.date_fin|date:"j F Y" }}</p>
+  </div>
+</article>

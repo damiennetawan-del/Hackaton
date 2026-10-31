@@ -1,0 +1,160 @@
+{% extends "rubanrose/base.html" %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+{% url 'rubanrose:acces_organisation' as url_acces_organisation %}
+
+<!-- Héros -->
+<section class="rr-hero">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <span class="rr-eyebrow">Prévention du cancer du sein au Bénin</span>
+        <h1 class="mt-2 mb-3">Ensemble, rendons la prévention <em>visible</em> et la solidarité <em>accessible</em>.</h1>
+        <p class="rr-lead fs-5 mb-4">RubanRose Connect rassemble au même endroit les associations, ONG et structures de santé engagées, leurs activités de sensibilisation et leurs initiatives de solidarité.</p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="#organisations" class="btn btn-rose btn-lg">Découvrir les organisations</a>
+          <a href="#activites" class="btn btn-rose-outline btn-lg">Voir les activités</a>
+        </div>
+        {% if url_acces_organisation %}
+        <p class="mt-4 mb-0 small text-muted">Vous représentez une organisation ? <a href="{{ url_acces_organisation }}">Accéder à l’espace organisation</a>.</p>
+        {% endif %}
+      </div>
+      <div class="col-lg-5">
+        <div class="rr-hero-visual" aria-hidden="true">
+          <div class="rr-hero-circle"><i class="bi bi-heart-fill"></i></div>
+          <span class="rr-chip rr-chip-1"><i class="bi bi-shield-check"></i>Organisations vérifiées</span>
+          <span class="rr-chip rr-chip-2"><i class="bi bi-calendar-heart"></i>Activités près de vous</span>
+          <span class="rr-chip rr-chip-3"><i class="bi bi-hand-thumbs-up"></i>Information fiable</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Présentation -->
+<section class="rr-section" id="presentation">
+  <div class="container">
+    <div class="text-center mb-5 rr-reveal">
+      <h2 class="rr-section-title">Un point de rencontre pour toutes les initiatives</h2>
+      <p class="rr-lead mx-auto">Trouver une organisation, participer à une journée de dépistage, s'informer ou soutenir une action : tout est réuni, sans compte à créer pour consulter.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 rr-reveal">
+        <div class="card rr-card h-100 p-4">
+          <div class="rr-icon-box"><i class="bi bi-people"></i></div>
+          <h3 class="h5">Des organisations engagées</h3>
+          <p class="text-muted mb-0">Associations, ONG et structures sanitaires présentent leur mission et leur zone d'intervention.</p>
+        </div>
+      </div>
+      <div class="col-md-4 rr-reveal">
+        <div class="card rr-card h-100 p-4">
+          <div class="rr-icon-box"><i class="bi bi-calendar-heart"></i></div>
+          <h3 class="h5">Des activités concrètes</h3>
+          <p class="text-muted mb-0">Sensibilisation, dépistage, conférences, accompagnement : repérez les prochains rendez-vous.</p>
+        </div>
+      </div>
+      <div class="col-md-4 rr-reveal">
+        <div class="card rr-card h-100 p-4">
+          <div class="rr-icon-box"><i class="bi bi-heart-pulse"></i></div>
+          <h3 class="h5">Une solidarité transparente</h3>
+          <p class="text-muted mb-0">Les cagnottes sont validées avant publication et détaillent l'utilisation prévue des fonds.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Organisations -->
+<section class="rr-section rr-section-soft" id="organisations">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2 rr-reveal">
+      <div>
+        <span class="rr-eyebrow">Organisations</span>
+        <h2 class="rr-section-title mb-0">Elles agissent près de vous</h2>
+      </div>
+      <button class="btn btn-rose-outline" type="button" data-bs-toggle="collapse" data-bs-target="#filtreVilleOrganisations" aria-expanded="{% if ville_selectionnee %}true{% else %}false{% endif %}" aria-controls="filtreVilleOrganisations">
+        <i class="bi bi-geo-alt me-1"></i>{% if ville_selectionnee %}{{ ville_selectionnee }}{% else %}Filtrer par ville{% endif %}
+      </button>
+    </div>
+    <div class="collapse mb-4 {% if ville_selectionnee %}show{% endif %}" id="filtreVilleOrganisations">
+      <form method="get" action="{% url 'rubanrose:accueil' %}#organisations" class="card rr-card rr-city-filter p-3">
+        <label for="villeOrganisations" class="form-label fw-semibold">Choisissez une ville du Bénin</label>
+        <div class="d-flex flex-column gap-2">
+          <select class="form-select" id="villeOrganisations" name="ville" data-auto-submit="true" required>
+            <option value="">Sélectionner une ville</option>
+            {% for ville in villes %}<option value="{{ ville }}" {% if ville == ville_selectionnee %}selected{% endif %}>{{ ville }}</option>{% endfor %}
+          </select>
+          {% if ville_selectionnee %}<a href="{% url 'rubanrose:accueil' %}#organisations" class="small">Effacer le filtre</a>{% endif %}
+        </div>
+        <small class="text-muted mt-2">Les organisations de cette ville s’afficheront automatiquement.</small>
+      </form>
+    </div>
+    <div class="row g-4">
+      {% for organisation in organisations %}
+        <div class="col-md-6 col-lg-4 rr-reveal">{% include "rubanrose/partials/_carte_organisation.html" %}</div>
+      {% empty %}
+        <div class="col-12 rr-empty"><i class="bi bi-people"></i>{% if ville_selectionnee %}Aucune organisation approuvée n'est actuellement enregistrée à {{ ville_selectionnee }}.{% else %}Aucune organisation approuvée pour le moment.{% endif %}</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Activités -->
+<section class="rr-section" id="activites">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2 rr-reveal">
+      <div>
+        <span class="rr-eyebrow">Agenda</span>
+        <h2 class="rr-section-title mb-0">Prochaines activités</h2>
+      </div>
+      <a href="{% url 'rubanrose:liste_activites' %}" class="btn btn-rose-outline">Filtrer les activités</a>
+    </div>
+    <div class="row g-4">
+      {% for activite in activites %}
+        <div class="col-md-6 col-lg-4 rr-reveal">{% include "rubanrose/partials/_carte_activite.html" %}</div>
+      {% empty %}
+        <div class="col-12 rr-empty"><i class="bi bi-calendar-heart"></i>Aucune activité à venir pour le moment.</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Cagnottes -->
+<section class="rr-section rr-section-soft" id="cagnottes">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-3 gap-2 rr-reveal">
+      <div>
+        <span class="rr-eyebrow">Solidarité</span>
+        <h2 class="rr-section-title mb-0">Cagnottes solidaires</h2>
+      </div>
+      <a href="{% url 'rubanrose:liste_cagnottes' %}" class="btn btn-rose-outline">Filtrer les cagnottes</a>
+    </div>
+    <div class="alert alert-light border mb-4 rr-reveal" role="note">
+      <i class="bi bi-info-circle text-rose me-1"></i>
+      Les paiements en ligne ne sont <strong>pas encore disponibles</strong>. Les cagnottes présentent pour l'instant les projets validés ; contactez directement l'organisation pour les soutenir.
+    </div>
+    <div class="row g-4">
+      {% for cagnotte in cagnottes %}
+        <div class="col-md-6 col-lg-4 rr-reveal">{% include "rubanrose/partials/_carte_cagnotte.html" %}</div>
+      {% empty %}
+        <div class="col-12 rr-empty"><i class="bi bi-heart-pulse"></i>Aucune cagnotte validée pour le moment.</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Appel à l'action -->
+{% if url_acces_organisation %}
+<section class="pb-5">
+  <div class="container">
+    <div class="rr-cta rr-reveal">
+      <h2 class="mb-2">Votre organisation agit contre le cancer du sein ?</h2>
+      <p class="mb-4 mx-auto" style="max-width: 36rem;">Rejoignez la plateforme pour faire connaître vos actions. Votre compte sera vérifié par un administrateur avant toute publication.</p>
+      <a href="{{ url_acces_organisation }}" class="btn btn-light btn-lg">Accéder à l’espace organisation</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

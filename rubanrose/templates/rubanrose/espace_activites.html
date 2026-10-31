@@ -1,0 +1,41 @@
+{% extends "rubanrose/base.html" %}
+
+{% block title %}Mes activités{% endblock %}
+
+{% block content %}
+<section class="rr-page-header">
+  <div class="container">
+    <nav aria-label="Fil d'Ariane"><ol class="breadcrumb mb-2">
+      <li class="breadcrumb-item"><a href="{% url 'rubanrose:tableau_de_bord' %}">Mon espace</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Mes activités</li>
+    </ol></nav>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <div><span class="rr-eyebrow">{{ organisation.nom }}</span><h1 class="mb-0">Mes activités</h1></div>
+      {% if organisation.peut_publier %}<a href="{% url 'rubanrose:creer_activite' %}" class="btn btn-rose">Proposer une activité</a>{% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="rr-section pt-4">
+  <div class="container">
+    <div class="card rr-card p-3 p-md-4">
+      {% for activite in activites %}
+        <article class="border-bottom py-3 {% if forloop.first %}pt-0{% endif %}">
+          <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+            <div>
+              <h2 class="h5 mb-1">{{ activite.titre }}</h2>
+              <p class="rr-meta mb-2">{{ activite.date_debut|date:"j F Y à H\hi" }} · {{ activite.get_categorie_display }} · {{ activite.lieu }}</p>
+              <span class="badge {% if activite.statut == 'PUBLIEE' %}text-bg-success{% elif activite.statut == 'REFUSEE' %}text-bg-danger{% elif activite.statut == 'EN_ATTENTE' %}text-bg-warning{% else %}text-bg-secondary{% endif %}">{{ activite.get_statut_display }}</span>
+              {% if activite.motif_refus %}<p class="small text-danger mt-2 mb-0"><strong>Motif du refus :</strong> {{ activite.motif_refus }}</p>{% endif %}
+            </div>
+            <a href="{% url 'rubanrose:modifier_activite' activite.pk %}" class="btn btn-rose-outline btn-sm">Modifier</a>
+          </div>
+        </article>
+      {% empty %}
+        <div class="rr-empty"><i class="bi bi-calendar-heart"></i>Vous n'avez pas encore proposé d'activité.</div>
+      {% endfor %}
+      <div class="pt-3"><a href="{% url 'rubanrose:tableau_de_bord' %}" class="btn btn-link px-0">Retour au tableau de bord</a></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

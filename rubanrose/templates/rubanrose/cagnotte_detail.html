@@ -1,0 +1,64 @@
+{% extends "rubanrose/base.html" %}
+
+{% block title %}{{ cagnotte.titre }}{% endblock %}
+
+{% block content %}
+<section class="rr-page-header">
+  <div class="container">
+    <nav aria-label="Fil d'Ariane"><ol class="breadcrumb mb-3">
+      <li class="breadcrumb-item"><a href="{% url 'rubanrose:accueil' %}">Accueil</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'rubanrose:liste_cagnottes' %}">Cagnottes</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ cagnotte.titre }}</li>
+    </ol></nav>
+    <h1 class="mb-1">{{ cagnotte.titre }}</h1>
+    <p class="mb-0 text-muted">Proposée par <a href="{{ cagnotte.organisation.get_absolute_url }}">{{ cagnotte.organisation.nom }}</a></p>
+  </div>
+</section>
+
+<section class="rr-section pt-4">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-8">
+        {% if cagnotte.image %}
+          <img src="{{ cagnotte.image.url }}" alt="Image : {{ cagnotte.titre }}" class="img-fluid rounded-4 mb-4 w-100" style="max-height:28rem;object-fit:cover;">
+        {% endif %}
+        <h2 class="h4">Le projet</h2>
+        <div class="text-muted mb-5">{{ cagnotte.description|linebreaks }}</div>
+
+        <h2 class="h4"><i class="bi bi-shield-check text-rose me-2"></i>Transparence</h2>
+        <div class="text-muted">{{ cagnotte.informations_transparence|linebreaks }}</div>
+      </div>
+
+      <aside class="col-lg-4">
+        <div class="card rr-card p-4">
+          <h2 class="h5 mb-3">Objectif</h2>
+          <p class="fs-3 fw-semibold mb-1" style="font-family:'Playfair Display',serif;">{{ cagnotte.objectif_financier|floatformat:"0g" }} FCFA</p>
+
+          {% if cagnotte.pourcentage_collecte is not None %}
+            <div class="progress my-2" role="progressbar" aria-valuenow="{{ cagnotte.pourcentage_collecte }}" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar" style="width: {{ cagnotte.pourcentage_collecte }}%"></div>
+            </div>
+            <p class="small mb-1"><strong>{{ cagnotte.montant_collecte|floatformat:"0g" }} FCFA</strong> collectés ({{ cagnotte.pourcentage_collecte }} %)</p>
+            <p class="rr-meta">Justificatif : {{ cagnotte.justificatif_collecte }}</p>
+          {% else %}
+            <p class="rr-meta mb-3"><i class="bi bi-info-circle"></i>Aucun montant collecté n'est communiqué pour le moment.</p>
+          {% endif %}
+
+          <p class="rr-meta mb-1"><i class="bi bi-calendar-event"></i>Du {{ cagnotte.date_debut|date:"j F Y" }}</p>
+          <p class="rr-meta mb-3"><i class="bi bi-calendar-check"></i>Au {{ cagnotte.date_fin|date:"j F Y" }}</p>
+
+          {% if cagnotte.paiements_disponibles %}
+            {# Le bouton de paiement sera branché ici lorsqu'un prestataire sera intégré. #}
+          {% else %}
+            <div class="alert alert-light border small" role="note">
+              <i class="bi bi-info-circle text-rose me-1"></i>Les paiements en ligne ne sont <strong>pas encore disponibles</strong>.
+            </div>
+            <button type="button" class="btn btn-rose w-100 mb-2" disabled>Faire un don (bientôt disponible)</button>
+          {% endif %}
+          <a href="mailto:{{ cagnotte.organisation.email_public }}" class="btn btn-rose-outline w-100">Contacter l'organisation</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}

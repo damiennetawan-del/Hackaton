@@ -1,0 +1,6 @@
+<div class="mb-3">
+  <label for="{{ champ.id_for_label }}" class="form-label">{{ champ.label }}{% if champ.field.required %} <span class="text-rose">*</span>{% endif %}</label>
+  {{ champ }}
+  {% if champ.help_text %}<div class="form-text">{{ champ.help_text }}</div>{% endif %}
+  {% for erreur in champ.errors %}<div class="text-danger small mt-1">{{ erreur }}</div>{% endfor %}
+</div>

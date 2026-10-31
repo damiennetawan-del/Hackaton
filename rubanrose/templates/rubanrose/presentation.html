@@ -1,0 +1,75 @@
+{% extends "rubanrose/base.html" %}
+
+{% block title %}Présentation{% endblock %}
+
+{% block content %}
+{% url 'rubanrose:inscription' as url_inscription %}
+<section class="rr-page-header">
+  <div class="container">
+    <nav aria-label="Fil d'Ariane"><ol class="breadcrumb mb-2">
+      <li class="breadcrumb-item"><a href="{% url 'rubanrose:accueil' %}">Accueil</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Présentation</li>
+    </ol></nav>
+    <h1>Qu'est-ce que RubanRose Connect ?</h1>
+    <p class="rr-lead mb-0">Une plateforme numérique pour centraliser l'information sur les organisations engagées dans la prévention du cancer du sein et l'accompagnement des personnes touchées au Bénin.</p>
+  </div>
+</section>
+
+<section class="rr-section">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-6 rr-reveal">
+        <span class="rr-eyebrow">Notre mission</span>
+        <h2 class="rr-section-title">Renforcer la visibilité des initiatives</h2>
+        <p class="text-muted">Les actions de sensibilisation et de solidarité sont nombreuses, mais dispersées. RubanRose Connect les rassemble pour faciliter l'accès à l'information, donner de la visibilité aux organisations et encourager la solidarité.</p>
+        <ul class="list-unstyled text-muted">
+          <li class="mb-2"><i class="bi bi-check-circle-fill text-rose me-2"></i>Découvrir les organisations engagées</li>
+          <li class="mb-2"><i class="bi bi-check-circle-fill text-rose me-2"></i>Consulter les campagnes, activités et événements</li>
+          <li class="mb-2"><i class="bi bi-check-circle-fill text-rose me-2"></i>Découvrir les initiatives de solidarité</li>
+          <li class="mb-2"><i class="bi bi-check-circle-fill text-rose me-2"></i>S'informer sur la prévention</li>
+        </ul>
+      </div>
+      <div class="col-lg-6 rr-reveal">
+        <div class="card rr-card p-4 h-100">
+          <h3 class="h5 mb-3"><i class="bi bi-shield-check text-rose me-2"></i>Une plateforme de confiance</h3>
+          <p class="text-muted">Pour protéger le public, chaque contenu suit un parcours de validation :</p>
+          <ol class="text-muted mb-0">
+            <li class="mb-2">Une organisation s'inscrit et attend la <strong>vérification</strong> de son compte par un administrateur.</li>
+            <li class="mb-2">Une fois approuvée, elle propose ses activités et cagnottes.</li>
+            <li class="mb-2">Chaque publication est <strong>validée</strong> avant d'apparaître publiquement.</li>
+            <li>Si une organisation est refusée ou désactivée, ses contenus disparaissent du site public.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="rr-section rr-section-soft">
+  <div class="container">
+    <div class="text-center mb-5 rr-reveal"><span class="rr-eyebrow">Comment ça marche</span><h2 class="rr-section-title">Pour les visiteurs et pour les organisations</h2></div>
+    <div class="row g-4">
+      <div class="col-lg-6 rr-reveal">
+        <div class="card rr-card p-4 h-100">
+          <h3 class="h5 mb-4">Pour le grand public</h3>
+          <div class="d-flex gap-3 mb-3"><span class="rr-step">1</span><p class="mb-0 text-muted">Parcourez les organisations, activités et cagnottes, sans créer de compte.</p></div>
+          <div class="d-flex gap-3 mb-3"><span class="rr-step">2</span><p class="mb-0 text-muted">Utilisez la recherche et les filtres pour trouver ce qui vous concerne.</p></div>
+          <div class="d-flex gap-3"><span class="rr-step">3</span><p class="mb-0 text-muted">Contactez l'organisation à partir de sa fiche pour participer ou la soutenir.</p></div>
+        </div>
+      </div>
+      <div class="col-lg-6 rr-reveal">
+        <div class="card rr-card p-4 h-100">
+          <h3 class="h5 mb-4">Pour les organisations</h3>
+          <div class="d-flex gap-3 mb-3"><span class="rr-step">1</span><p class="mb-0 text-muted">Créez un compte et renseignez les informations de votre organisation.</p></div>
+          <div class="d-flex gap-3 mb-3"><span class="rr-step">2</span><p class="mb-0 text-muted">Attendez la vérification par un administrateur.</p></div>
+          <div class="d-flex gap-3"><span class="rr-step">3</span><p class="mb-0 text-muted">Gérez vos activités et proposez des cagnottes, soumises à validation.</p></div>
+          {% if url_inscription %}<a href="{{ url_inscription }}" class="btn btn-rose mt-4 align-self-start">Inscrire mon organisation</a>{% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="alert alert-light border mt-4 mb-0 rr-reveal" role="note">
+      <i class="bi bi-info-circle text-rose me-1"></i><strong>Paiements :</strong> la plateforme n'intègre pas encore de service de paiement. Aucun don ne peut être effectué ni enregistré en ligne pour le moment.
+    </div>
+  </div>
+</section>
+{% endblock %}

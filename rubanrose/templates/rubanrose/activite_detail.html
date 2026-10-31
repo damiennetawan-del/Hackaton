@@ -1,0 +1,54 @@
+{% extends "rubanrose/base.html" %}
+
+{% block title %}{{ activite.titre }}{% endblock %}
+
+{% block content %}
+<section class="rr-page-header">
+  <div class="container">
+    <nav aria-label="Fil d'Ariane"><ol class="breadcrumb mb-3">
+      <li class="breadcrumb-item"><a href="{% url 'rubanrose:accueil' %}">Accueil</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'rubanrose:liste_activites' %}">Activités</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ activite.titre }}</li>
+    </ol></nav>
+    <span class="badge rr-badge mb-2">{{ activite.get_categorie_display }}</span>
+    <h1 class="mb-0">{{ activite.titre }}</h1>
+  </div>
+</section>
+
+<section class="rr-section pt-4">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-8">
+        {% if activite.image %}
+          <img src="{{ activite.image.url }}" alt="Affiche : {{ activite.titre }}" class="img-fluid rounded-4 mb-4 w-100" style="max-height:28rem;object-fit:cover;">
+        {% endif %}
+        <h2 class="h4">Description</h2>
+        <div class="text-muted">{{ activite.description|linebreaks }}</div>
+      </div>
+      <aside class="col-lg-4">
+        <div class="card rr-card p-4 mb-4">
+          <h2 class="h5 mb-3">Informations pratiques</h2>
+          <p class="mb-2"><i class="bi bi-calendar-event text-rose me-2"></i><strong>Début :</strong><br><span class="ms-4 ps-1">{{ activite.date_debut|date:"l j F Y" }} à {{ activite.date_debut|date:"H\hi" }}</span></p>
+          {% if activite.date_fin %}
+          <p class="mb-2"><i class="bi bi-calendar-check text-rose me-2"></i><strong>Fin :</strong><br><span class="ms-4 ps-1">{{ activite.date_fin|date:"l j F Y" }} à {{ activite.date_fin|date:"H\hi" }}</span></p>
+          {% endif %}
+          <p class="mb-3"><i class="bi bi-geo-alt-fill text-rose me-2"></i><strong>Lieu :</strong><br><span class="ms-4 ps-1">{{ activite.lieu }}</span></p>
+          <hr>
+          <p class="mb-1 small text-muted">Organisée par</p>
+          <a href="{{ activite.organisation.get_absolute_url }}" class="fw-semibold">{{ activite.organisation.nom }}</a>
+          <p class="mt-2 mb-0 small"><i class="bi bi-envelope-fill text-rose me-1"></i><a href="mailto:{{ activite.organisation.email_public }}">{{ activite.organisation.email_public }}</a></p>
+        </div>
+      </aside>
+    </div>
+
+    {% if autres_activites %}
+    <h2 class="h4 mt-5 mb-3">Autres activités de cette organisation</h2>
+    <div class="row g-4">
+      {% for activite in autres_activites %}
+        <div class="col-md-6 col-lg-4">{% include "rubanrose/partials/_carte_activite.html" %}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

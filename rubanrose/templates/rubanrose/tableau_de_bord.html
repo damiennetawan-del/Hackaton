@@ -1,0 +1,93 @@
+{% extends "rubanrose/base.html" %}
+
+{% block title %}Mon espace{% endblock %}
+
+{% block content %}
+{% url 'rubanrose:creer_activite' as url_creer_activite %}
+{% url 'rubanrose:creer_cagnotte' as url_creer_cagnotte %}
+
+<section class="rr-page-header">
+  <div class="container">
+    <span class="rr-eyebrow">Mon espace</span>
+    <h1 class="mb-1">{{ organisation.nom }}</h1>
+    <p class="text-muted mb-0">Tableau de bord de votre organisation</p>
+  </div>
+</section>
+
+<section class="rr-section pt-4">
+  <div class="container">
+
+    {# Statut de vérification #}
+    {% if organisation.est_approuvee and organisation.est_active %}
+      <div class="alert alert-success" role="status"><i class="bi bi-patch-check-fill me-1"></i><strong>Organisation approuvée.</strong> Vous pouvez proposer des activités et des cagnottes ; chacune est validée par un administrateur avant publication.</div>
+    {% elif organisation.est_approuvee %}
+      <div class="alert alert-warning" role="status"><i class="bi bi-pause-circle me-1"></i><strong>Organisation désactivée.</strong> Vos contenus ne sont plus visibles publiquement. Contactez un administrateur.</div>
+    {% elif organisation.statut_verification == 'REFUSEE' %}
+      <div class="alert alert-danger" role="status"><i class="bi bi-x-circle me-1"></i><strong>Demande refusée.</strong>
+        {% if organisation.motif_refus %}Motif : {{ organisation.motif_refus }}{% else %}Aucun motif n'a été indiqué ; contactez un administrateur.{% endif %}
+      </div>
+    {% else %}
+      <div class="alert alert-warning" role="status"><i class="bi bi-hourglass-split me-1"></i><strong>En attente de vérification.</strong> Un administrateur doit approuver votre organisation avant que vous puissiez publier.</div>
+    {% endif %}
+
+    {# Chiffres réels de votre compte #}
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-lg-3"><div class="card rr-card p-3 h-100"><span class="rr-meta">Activités</span><span class="fs-3 fw-semibold">{{ nb_activites }}</span></div></div>
+      <div class="col-6 col-lg-3"><div class="card rr-card p-3 h-100"><span class="rr-meta">Activités publiées</span><span class="fs-3 fw-semibold">{{ nb_activites_publiees }}</span></div></div>
+      <div class="col-6 col-lg-3"><div class="card rr-card p-3 h-100"><span class="rr-meta">Cagnottes</span><span class="fs-3 fw-semibold">{{ nb_cagnottes }}</span></div></div>
+      <div class="col-6 col-lg-3"><div class="card rr-card p-3 h-100"><span class="rr-meta">Cagnottes validées</span><span class="fs-3 fw-semibold">{{ nb_cagnottes_validees }}</span></div></div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="card rr-card p-4">
+          <h2 class="h5 mb-3">Mes informations</h2>
+          <p class="mb-2"><i class="bi bi-geo-alt-fill text-rose me-2"></i>{{ organisation.ville }}</p>
+          <p class="mb-2"><i class="bi bi-pin-map text-rose me-2"></i>{{ organisation.zone_intervention }}</p>
+          <p class="mb-2"><i class="bi bi-envelope-fill text-rose me-2"></i>{{ organisation.email_public }}</p>
+          {% if organisation.telephone_public %}<p class="mb-2"><i class="bi bi-telephone-fill text-rose me-2"></i>{{ organisation.telephone_public }}</p>{% endif %}
+          <p class="rr-meta">Inscrite le {{ organisation.date_inscription|date:"j F Y" }}</p>
+          <a href="{% url 'rubanrose:modifier_organisation' %}" class="btn btn-rose-outline w-100 mb-2">Modifier mes informations</a>
+          {% if organisation.peut_publier %}
+            <a href="{{ organisation.get_absolute_url }}" class="btn btn-rose w-100">Voir ma fiche publique</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="card rr-card p-4 mb-4">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <h2 class="h5 mb-0">Mes activités récentes</h2>
+            {% if url_creer_activite and organisation.peut_publier %}<a href="{{ url_creer_activite }}" class="btn btn-rose btn-sm">Nouvelle activité</a>{% endif %}
+          </div>
+          {% for a in activites %}
+            <div class="d-flex justify-content-between align-items-center border-top py-2 gap-2">
+              <div><a class="fw-semibold" href="{% url 'rubanrose:modifier_activite' a.pk %}">{{ a.titre }}</a><br><span class="rr-meta">{{ a.date_debut|date:"j F Y" }} · {{ a.get_categorie_display }}</span></div>
+              <span class="badge {% if a.statut == 'PUBLIEE' %}text-bg-success{% elif a.statut == 'REFUSEE' %}text-bg-danger{% elif a.statut == 'EN_ATTENTE' %}text-bg-warning{% else %}text-bg-secondary{% endif %}">{{ a.get_statut_display }}</span>
+            </div>
+          {% empty %}
+            <p class="text-muted small mb-0">Vous n'avez pas encore d'activité.</p>
+          {% endfor %}
+          <a href="{% url 'rubanrose:liste_activites_espace' %}" class="btn btn-link px-0 pb-0">Voir toutes mes activités</a>
+        </div>
+
+        <div class="card rr-card p-4">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <h2 class="h5 mb-0">Mes cagnottes</h2>
+            {% if url_creer_cagnotte and organisation.peut_publier %}<a href="{{ url_creer_cagnotte }}" class="btn btn-rose btn-sm">Proposer une cagnotte</a>{% endif %}
+          </div>
+          {% for c in cagnottes %}
+            <div class="d-flex justify-content-between align-items-center border-top py-2 gap-2">
+              <div><a class="fw-semibold" href="{% url 'rubanrose:modifier_cagnotte' c.pk %}">{{ c.titre }}</a><br><span class="rr-meta">Objectif : {{ c.objectif_financier|floatformat:"0g" }} FCFA</span></div>
+              <span class="badge {% if c.statut == 'VALIDEE' %}text-bg-success{% elif c.statut == 'REFUSEE' %}text-bg-danger{% else %}text-bg-warning{% endif %}">{{ c.get_statut_display }}</span>
+            </div>
+          {% empty %}
+            <p class="text-muted small mb-0">Vous n'avez pas encore de cagnotte.</p>
+          {% endfor %}
+          <a href="{% url 'rubanrose:liste_cagnottes_espace' %}" class="btn btn-link px-0 pb-0">Voir toutes mes cagnottes</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

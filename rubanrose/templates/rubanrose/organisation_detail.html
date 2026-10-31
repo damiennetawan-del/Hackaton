@@ -1,0 +1,68 @@
+{% extends "rubanrose/base.html" %}
+
+{% block title %}{{ organisation.nom }}{% endblock %}
+
+{% block content %}
+<section class="rr-page-header">
+  <div class="container">
+    <nav aria-label="Fil d'Ariane"><ol class="breadcrumb mb-3">
+      <li class="breadcrumb-item"><a href="{% url 'rubanrose:accueil' %}">Accueil</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'rubanrose:liste_organisations' %}">Organisations</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ organisation.nom }}</li>
+    </ol></nav>
+    <div class="d-flex align-items-center gap-3">
+      {% if organisation.logo %}
+        <img src="{{ organisation.logo.url }}" alt="Logo de {{ organisation.nom }}" class="rr-logo" style="width:5rem;height:5rem;">
+      {% else %}
+        <span class="rr-logo rr-logo-vide" style="width:5rem;height:5rem;font-size:2rem;" aria-hidden="true"><i class="bi bi-people-fill"></i></span>
+      {% endif %}
+      <div>
+        <h1 class="mb-1">{{ organisation.nom }}</h1>
+        <span class="badge rr-badge"><i class="bi bi-patch-check-fill me-1"></i>Organisation vérifiée</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="rr-section pt-4">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-8">
+        <h2 class="h4">À propos</h2>
+        <div class="text-muted mb-5">{{ organisation.description|linebreaks }}</div>
+
+        <h2 class="h4 mb-3">Activités</h2>
+        <div class="row g-4 mb-5">
+          {% for activite in activites %}
+            <div class="col-md-6">{% include "rubanrose/partials/_carte_activite.html" %}</div>
+          {% empty %}
+            <div class="col-12 rr-empty py-4"><i class="bi bi-calendar-heart"></i>Aucune activité publiée pour le moment.</div>
+          {% endfor %}
+        </div>
+
+        <h2 class="h4 mb-3">Cagnottes solidaires</h2>
+        <div class="row g-4">
+          {% for cagnotte in cagnottes %}
+            <div class="col-md-6">{% include "rubanrose/partials/_carte_cagnotte.html" %}</div>
+          {% empty %}
+            <div class="col-12 rr-empty py-4"><i class="bi bi-heart-pulse"></i>Aucune cagnotte validée pour le moment.</div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <aside class="col-lg-4">
+        <div class="card rr-card p-4">
+          <h2 class="h5 mb-3">Informations</h2>
+          <p class="mb-2"><i class="bi bi-geo-alt-fill text-rose me-2"></i>{{ organisation.zone_intervention }}</p>
+          <p class="mb-2"><i class="bi bi-buildings text-rose me-2"></i>{{ organisation.ville }}</p>
+          <p class="mb-2"><i class="bi bi-envelope-fill text-rose me-2"></i><a href="mailto:{{ organisation.email_public }}">{{ organisation.email_public }}</a></p>
+          {% if organisation.telephone_public %}<p class="mb-2"><i class="bi bi-telephone-fill text-rose me-2"></i>{{ organisation.telephone_public }}</p>{% endif %}
+          {% if organisation.site_web %}<p class="mb-2"><i class="bi bi-globe text-rose me-2"></i><a href="{{ organisation.site_web }}" target="_blank" rel="noopener noreferrer">Site web</a></p>{% endif %}
+          <hr>
+          <p class="rr-meta mb-0">Inscrite le {{ organisation.date_inscription|date:"j F Y" }}</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,18 @@
+<article class="card rr-card h-100">
+  <div class="rr-media">
+    {% if activite.image %}
+      <img src="{{ activite.image.url }}" alt="Affiche : {{ activite.titre }}">
+    {% else %}
+      <i class="bi bi-calendar-heart" aria-hidden="true"></i>
+    {% endif %}
+  </div>
+  <div class="card-body p-4">
+    <span class="badge rr-badge mb-2">{{ activite.get_categorie_display }}</span>
+    <h3 class="h5">
+      <a class="stretched-link" href="{{ activite.get_absolute_url }}">{{ activite.titre }}</a>
+    </h3>
+    <p class="rr-meta mb-1"><i class="bi bi-calendar-event"></i>{{ activite.date_debut|date:"j F Y" }} à {{ activite.date_debut|date:"H\hi" }}</p>
+    <p class="rr-meta mb-1"><i class="bi bi-geo-alt-fill"></i>{{ activite.lieu }}</p>
+    <p class="rr-meta mb-0"><i class="bi bi-people-fill"></i>{{ activite.organisation.nom }}</p>
+  </div>
+</article>

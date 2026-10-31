@@ -1,0 +1,18 @@
+<article class="card rr-card h-100">
+  <div class="card-body p-4">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      {% if organisation.logo %}
+        <img src="{{ organisation.logo.url }}" alt="Logo de {{ organisation.nom }}" class="rr-logo">
+      {% else %}
+        <span class="rr-logo rr-logo-vide" aria-hidden="true"><i class="bi bi-people-fill"></i></span>
+      {% endif %}
+      <div>
+        <h3 class="h5 mb-0">
+          <a class="stretched-link" href="{{ organisation.get_absolute_url }}">{{ organisation.nom }}</a>
+        </h3>
+        <span class="rr-meta"><i class="bi bi-geo-alt-fill"></i>{{ organisation.ville }}</span>
+      </div>
+    </div>
+    <p class="text-muted small mb-0">{{ organisation.description|truncatewords:28 }}</p>
+  </div>
+</article>

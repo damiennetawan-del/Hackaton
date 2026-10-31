@@ -1,0 +1,55 @@
+{% extends "rubanrose/base.html" %}
+
+{% block title %}Activités et événements{% endblock %}
+
+{% block content %}
+<section class="rr-page-header">
+  <div class="container">
+    <nav aria-label="Fil d'Ariane"><ol class="breadcrumb mb-2">
+      <li class="breadcrumb-item"><a href="{% url 'rubanrose:accueil' %}">Accueil</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Activités</li>
+    </ol></nav>
+    <h1>Activités et événements</h1>
+    <p class="rr-lead mb-0">Sensibilisation, dépistage, conférences, accompagnement, collectes solidaires.</p>
+  </div>
+</section>
+
+<section class="rr-section pt-4">
+  <div class="container">
+    <form method="get" class="rr-filtres mb-4">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-4">
+          <label for="q" class="form-label small mb-1">Recherche</label>
+          <input type="search" id="q" name="q" value="{{ q }}" class="form-control" placeholder="Titre, lieu, organisation…">
+        </div>
+        <div class="col-md-3">
+          <label for="categorie" class="form-label small mb-1">Catégorie</label>
+          <select id="categorie" name="categorie" class="form-select">
+            <option value="">Toutes</option>
+            {% for valeur, libelle in categories %}<option value="{{ valeur }}" {% if valeur == categorie %}selected{% endif %}>{{ libelle }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="periode" class="form-label small mb-1">Période</label>
+          <select id="periode" name="periode" class="form-select">
+            <option value="a_venir" {% if periode == 'a_venir' %}selected{% endif %}>À venir</option>
+            <option value="passees" {% if periode == 'passees' %}selected{% endif %}>Passées</option>
+            <option value="toutes" {% if periode == 'toutes' %}selected{% endif %}>Toutes</option>
+          </select>
+        </div>
+        <div class="col-md-2 d-grid"><button type="submit" class="btn btn-rose">Filtrer</button></div>
+      </div>
+    </form>
+
+    <p class="text-muted small">{{ page_obj.paginator.count }} activité{{ page_obj.paginator.count|pluralize }}</p>
+    <div class="row g-4">
+      {% for activite in page_obj %}
+        <div class="col-md-6 col-lg-4">{% include "rubanrose/partials/_carte_activite.html" %}</div>
+      {% empty %}
+        <div class="col-12 rr-empty"><i class="bi bi-calendar-x"></i>Aucune activité ne correspond à votre recherche.</div>
+      {% endfor %}
+    </div>
+    {% include "rubanrose/partials/_pagination.html" %}
+  </div>
+</section>
+{% endblock %}

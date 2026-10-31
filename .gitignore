@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Environnement virtuel (adapte le nom si le tien est différent)
+venv/
+env/
+.venv/
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+.env
+
+# IDE / système
+.vscode/
+.idea/
+.DS_Store

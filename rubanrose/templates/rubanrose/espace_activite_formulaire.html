@@ -1,0 +1,35 @@
+{% extends "rubanrose/base.html" %}
+
+{% block title %}{{ titre_page }}{% endblock %}
+
+{% block content %}
+<section class="rr-page-header">
+  <div class="container">
+    <nav aria-label="Fil d'Ariane"><ol class="breadcrumb mb-2">
+      <li class="breadcrumb-item"><a href="{% url 'rubanrose:tableau_de_bord' %}">Mon espace</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'rubanrose:liste_activites_espace' %}">Mes activités</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ titre_page }}</li>
+    </ol></nav>
+    <span class="rr-eyebrow">{{ organisation.nom }}</span>
+    <h1>{{ titre_page }}</h1>
+    <p class="rr-lead mb-0">Les activités sont vérifiées par un administrateur avant leur publication.</p>
+  </div>
+</section>
+
+<section class="rr-section pt-4">
+  <div class="container">
+    <div class="row justify-content-center"><div class="col-lg-8">
+      <form method="post" enctype="multipart/form-data" novalidate class="card rr-card p-4">
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+        {% for champ in form %}{% include "rubanrose/partials/_champ_formulaire.html" with champ=champ %}{% endfor %}
+        <p class="small text-muted">Le statut de validation est géré par la plateforme. Une activité publiée repasse en attente de validation après modification.</p>
+        <div class="d-flex flex-wrap gap-2">
+          <button type="submit" class="btn btn-rose">Enregistrer</button>
+          <a href="{% url 'rubanrose:liste_activites_espace' %}" class="btn btn-rose-outline">Annuler</a>
+        </div>
+      </form>
+    </div></div>
+  </div>
+</section>
+{% endblock %}

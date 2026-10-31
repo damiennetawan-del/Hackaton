@@ -1,0 +1,73 @@
+{% extends "rubanrose/base.html" %}
+
+{% block title %}Inscrire mon organisation{% endblock %}
+
+{% block content %}
+<section class="rr-page-header">
+  <div class="container">
+    <nav class="breadcrumb mb-2" aria-label="Fil d'Ariane">
+      <span class="breadcrumb-item"><a href="{% url 'rubanrose:accueil' %}">Accueil</a></span>
+      <span class="breadcrumb-item active" aria-current="page">Inscription</span>
+    </nav>
+    <h1>Inscrire mon organisation</h1>
+    <p class="rr-lead mb-0">Association, ONG, structure de santé ou partenaire : rejoignez la plateforme pour faire connaître vos actions.</p>
+  </div>
+</section>
+
+<section class="rr-section pt-4">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="alert alert-light border mb-4" role="note">
+          <i class="bi bi-shield-check text-rose me-1"></i>
+          Après l'inscription, votre organisation est <strong>en attente de vérification</strong> par un administrateur. Vous ne pourrez publier qu'une fois votre compte approuvé.
+        </div>
+
+        <form method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          <div class="card rr-card p-4 mb-4">
+            <h2 class="h5 mb-2"><i class="bi bi-person-lock text-rose me-2"></i>Créer votre accès privé</h2>
+            <p class="small text-muted">Ces informations vous serviront à vous connecter à votre espace pour gérer votre organisation, vos activités et vos cagnottes. Elles ne seront pas affichées au public. L’e-mail public de votre organisation se renseigne dans la section « Coordonnées publiques ».</p>
+            <div class="row">
+              <div class="col-md-6">{% include "rubanrose/partials/_champ_formulaire.html" with champ=form.username %}</div>
+              <div class="col-md-6">{% include "rubanrose/partials/_champ_formulaire.html" with champ=form.email %}</div>
+              <div class="col-md-6">{% include "rubanrose/partials/_champ_formulaire.html" with champ=form.password1 %}</div>
+              <div class="col-md-6">{% include "rubanrose/partials/_champ_formulaire.html" with champ=form.password2 %}</div>
+            </div>
+          </div>
+
+          <div class="card rr-card p-4 mb-4">
+            <h2 class="h5 mb-3"><i class="bi bi-people text-rose me-2"></i>Votre organisation</h2>
+            {% include "rubanrose/partials/_champ_formulaire.html" with champ=form.nom %}
+            <div class="row">
+              <div class="col-md-5">{% include "rubanrose/partials/_champ_formulaire.html" with champ=form.ville %}</div>
+              <div class="col-md-7">{% include "rubanrose/partials/_champ_formulaire.html" with champ=form.zone_intervention %}</div>
+            </div>
+            {% include "rubanrose/partials/_champ_formulaire.html" with champ=form.description %}
+            {% include "rubanrose/partials/_champ_formulaire.html" with champ=form.logo %}
+          </div>
+
+          <div class="card rr-card p-4 mb-4">
+            <h2 class="h5 mb-3"><i class="bi bi-telephone text-rose me-2"></i>Coordonnées publiques</h2>
+            <p class="small text-muted">Ces informations seront visibles par le public sur la fiche de votre organisation.</p>
+            <div class="row">
+              <div class="col-md-6">{% include "rubanrose/partials/_champ_formulaire.html" with champ=form.email_public %}</div>
+              <div class="col-md-6">{% include "rubanrose/partials/_champ_formulaire.html" with champ=form.telephone_public %}</div>
+            </div>
+            {% include "rubanrose/partials/_champ_formulaire.html" with champ=form.site_web %}
+          </div>
+
+          <div class="d-flex flex-wrap align-items-center gap-3">
+            <button type="submit" class="btn btn-rose btn-lg">Créer mon compte</button>
+            <span class="small text-muted">Déjà inscrite ? <a href="{% url 'rubanrose:connexion' %}">Se connecter</a></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
